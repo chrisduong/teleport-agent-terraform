@@ -1,11 +1,11 @@
 # Agent auto scaling group to provide highly available copies of Teleport agents.
 resource "aws_autoscaling_group" "agent" {
   #name                      = "${var.teleport_agent_name}-agent"
-  max_size                  = 1000
-  min_size                  = 1
+  max_size                  = var.max_size
+  min_size                  = var.min_size
   health_check_grace_period = 300
   health_check_type         = "EC2"
-  desired_capacity          = length(var.subnet_ids)
+  desired_capacity          = var.desired_capacity
   force_delete              = false
   launch_configuration      = aws_launch_configuration.agent.name
   vpc_zone_identifier       = [for subnet in data.aws_subnet.agent : subnet.id]
@@ -37,10 +37,10 @@ resource "aws_launch_configuration" "agent" {
   lifecycle {
     create_before_destroy = true
   }
-  name_prefix                 = "${var.teleport_agent_name}-agent-"
-  image_id                    = var.ami_id
-  instance_type               = var.agent_instance_type
-  user_data                   = templatefile(
+  name_prefix   = "${var.teleport_agent_name}-agent-"
+  image_id      = var.ami_id
+  instance_type = var.agent_instance_type
+  user_data = templatefile(
     "${path.module}/agent-user-data.tpl",
     {
       region                                  = data.aws_region.current.name
@@ -68,6 +68,6 @@ resource "aws_launch_configuration" "agent" {
   )
   key_name                    = var.key_name
   associate_public_ip_address = false
-  security_groups             = [for s in aws_security_group.agent: s.id]
+  security_groups             = [for s in aws_security_group.agent : s.id]
   iam_instance_profile        = aws_iam_instance_profile.agent.id
 }

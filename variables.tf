@@ -157,3 +157,16 @@ variable "ami_owner_account_id" {
   type    = string
   default = "126027368216"
 }
+
+# ASG
+variable "min_size" {
+  default = 1
+}
+
+variable "max_size" {
+  default = 4
+}
+
+variable "desired_capacity" {
+  default = 1
+}
