@@ -7,19 +7,15 @@ terraform {
     }
     template = {
       source  = "hashicorp/template"
-      version = "~> 2.2.0"
+      version = ">= 2.2"
     }
     random = {
       source  = "hashicorp/random"
-      version = "~> 2.2.1"
+      version = ">= 2.2"
     }
     local = {
       source  = "hashicorp/local"
-      version = "~> 2.0.0"
+      version = ">= 2.2"
     }
   }
-}
-
-variable "aws_max_retries" {
-  default = 5
 }

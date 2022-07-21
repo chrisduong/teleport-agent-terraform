@@ -170,3 +170,7 @@ variable "max_size" {
 variable "desired_capacity" {
   default = 1
 }
+
+variable "aws_max_retries" {
+  default = 5
+}
